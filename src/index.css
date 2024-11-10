@@ -1,0 +1,22 @@
+.App {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .dashboard {
+    max-width: 100%;
+    margin: auto;
+  }
+  
+  .incident-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .incident-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
