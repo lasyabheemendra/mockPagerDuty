@@ -40,7 +40,7 @@ const IncidentPieChart = ({ incidents }) => {
 					y="45%"
 					textAnchor="middle"
 					dominantBaseline="middle"
-					style={{ fontSize: '12px', fontWeight: 'bold' }}
+					style={{ fontSize: '14px', fontWeight: 'bold' }}
 				>
 					{`Open Incidents: ${totalOpenIncidents}`}
 				</text>
@@ -49,7 +49,7 @@ const IncidentPieChart = ({ incidents }) => {
 					y="55%"
 					textAnchor="middle"
 					dominantBaseline="middle"
-					style={{ fontSize: '12px', fontWeight: 'bold' }}
+					style={{ fontSize: '14px', fontWeight: 'bold' }}
 				>
 					{`All-Time Incidents: ${totalIncidents}`}
 				</text>
