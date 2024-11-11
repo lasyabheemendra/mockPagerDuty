@@ -2,6 +2,9 @@
 
 An Incident Management Dashboard built with React, Material-UI, and Netlify Functions for managing and visualizing incident data. This application fetches incident data from an external API, provides filtering options, and displays insights with visual components like a pie chart and a data table.
 
+# View the Live Application
+you can view application at the following URL: [https://your-netlify-app.netlify.app](https://mockincidents.netlify.app/)
+
 ## Features
 
 - **Incident Data Visualization**: Displays incident status with a pie chart and detailed data in a table format.
