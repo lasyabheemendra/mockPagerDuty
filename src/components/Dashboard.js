@@ -46,8 +46,10 @@ const Dashboard = () => {
     <div className="dashboard">
       <h2>Incidents Dashboard</h2>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <IncidentPieChart incidents={incidents} />
-        <IncidentTable incidents={incidents} />
+        <div className="chart-table-wrapper">
+          <IncidentPieChart incidents={incidents} />
+          <IncidentTable incidents={incidents} />
+        </div>
       </LocalizationProvider>
     </div>
   );
