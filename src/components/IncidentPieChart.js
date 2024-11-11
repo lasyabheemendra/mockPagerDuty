@@ -14,6 +14,10 @@ const IncidentPieChart = ({ incidents }) => {
     { Triggered: 0, Acknowledged: 0, Resolved: 0 }
   );
 
+  // Calculate the total incidents
+  const totalIncidents = statusCounts.Triggered + statusCounts.Acknowledged + statusCounts.Resolved;
+
+
   // Calculate the total open incidents (Triggered and Acknowledged)
   const totalOpenIncidents = statusCounts.Triggered + statusCounts.Acknowledged;
 
@@ -47,6 +51,15 @@ const IncidentPieChart = ({ incidents }) => {
           style={{ fontSize: '16px', fontWeight: 'bold' }}
         >
           {`Open Incidents: ${totalOpenIncidents}`}
+        </text>
+        <text
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{ fontSize: '16px', fontWeight: 'bold' }}
+        >
+          {`All-Time Incidents: ${totalIncidents}`}
         </text>
       </PieChart>
       <Box ml={4}>
