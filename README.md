@@ -32,7 +32,7 @@ An Incident Management Dashboard built with React, Material-UI, and Netlify Func
 │   ├── mockIncidents.json     # Mock data for incidents
 │   └── index.js               # React DOM rendering entry point
 └── README.md                  # Project documentation
-
+```
 ## Getting Started with Deployment on Netlify
 
 ### Prerequisites
