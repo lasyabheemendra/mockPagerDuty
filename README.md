@@ -79,11 +79,3 @@ you can view application at the following URL: [https://your-netlify-app.netlify
 8. **Access Your Application**:
    - After deployment, access the live app using the URL Netlify provides. 
    - Your app will be accessible at a URL like: `https://your-netlify-app.netlify.app` (replace with your actual Netlify URL).
-   - You can monitor serverless functions under the **Functions** tab in your Netlify dashboard, where you can also view logs and monitor activity.
-
-### View the Live Application
-
-Once deployed, you can view your application at the following URL:
-**[https://your-netlify-app.netlify.app](https://your-netlify-app.netlify.app)**
-
-Replace this URL with the actual one provided by Netlify after deployment.
