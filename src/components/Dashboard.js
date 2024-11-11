@@ -7,19 +7,15 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import mockIncidents from '../mockIncidents.json';
 
 const Dashboard = () => {
-  const [incidents, setIncidents] = useState(mockIncidents);
+  const [incidents, setIncidents] = useState([]);
   const [alertMessage, setAlertMessage] = useState(null);
 
+  // Fetch incidents from PagerDuty API or fallback to mock data on error
   const fetchIncidents = async () => {
     try {
-      const response = await axios.get('https://api.pagerduty.com/incidents', {
-        headers: {
-          Authorization: 'Token token=y_NbAkKc66ryYTWUXYEu',
-          Accept: 'application/vnd.pagerduty+json;version=2',
-          'Content-Type': 'application/json',
-        },
-        params: { limit: 30 },
-      });
+      const response = await axios.get('http://localhost:5001/api/incidents');
+    
+      // Check if incidents are empty; fallback to mock data if no incidents found
       if (response.data.incidents.length === 0) {
         setIncidents(mockIncidents);
       } else {
@@ -32,10 +28,12 @@ const Dashboard = () => {
     }
   };
 
+  // UseEffect hook to fetch incidents on component mount
   useEffect(() => {
     fetchIncidents();
   }, []);
 
+  // UseEffect hook to display alert message if there's an error
   useEffect(() => {
     if (alertMessage) {
       alert(alertMessage);
@@ -43,6 +41,7 @@ const Dashboard = () => {
     }
   }, [alertMessage]);
 
+  // Render the dashboard UI with incident data and localization support
   return (
     <div className="dashboard">
       <h2>Incidents Dashboard</h2>
