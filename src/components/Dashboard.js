@@ -13,7 +13,7 @@ const Dashboard = () => {
   // Fetch incidents from PagerDuty API or fallback to mock data on error
   const fetchIncidents = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/incidents');
+      const response = await axios.get('/.netlify/functions/fetchIncidents');
     
       // Check if incidents are empty; fallback to mock data if no incidents found
       if (response.data.incidents.length === 0) {
