@@ -15,7 +15,6 @@ import {
 	Menu,
 	MenuItem,
 	InputAdornment,
-	Button, // Import Button
 } from '@mui/material';
 import { parseISO, format } from 'date-fns';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -23,14 +22,17 @@ import ClearIcon from '@mui/icons-material/Clear';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import dayjs from 'dayjs';
 
-// Utility function to format the incident creation date
+// Utility function to format incident creation date
 const formatDate = (created_at) => {
 	let formattedDate;
 	try {
+		// Parse date if available
 		const parsedDate = created_at ? parseISO(created_at) : null;
 		if (!isNaN(parsedDate)) {
+			// Format parsed date as "MMM d, yyyy at h:mm a"
 			formattedDate = format(parsedDate, "MMM d, yyyy 'at' h:mm a");
 		} else {
+			// Fallback to local date format if parsing fails
 			const fallbackDate = new Date(created_at);
 			formattedDate = !isNaN(fallbackDate)
 				? `on ${fallbackDate.toLocaleString('en-US', {
@@ -48,7 +50,7 @@ const formatDate = (created_at) => {
 };
 
 const IncidentTable = ({ incidents }) => {
-	// Define initial filter values
+	// State to manage filters for incidents table
 	const initialFilters = {
 		status: [],
 		priority: [],
@@ -58,6 +60,7 @@ const IncidentTable = ({ incidents }) => {
 	};
 
 	const [filters, setFilters] = useState(initialFilters);
+
 	const [sortOrder, setSortOrder] = useState('asc');
 	const [anchorEl, setAnchorEl] = useState({});
 	const [titleFilterVisible, setTitleFilterVisible] = useState(false);
@@ -68,7 +71,7 @@ const IncidentTable = ({ incidents }) => {
 		setFilters(initialFilters);
 	};
 
-	// Function to handle changes in filters for different fields
+	// Handle changes in filters for different fields
 	const handleFilterChange = (field, value) => {
 		setFilters((prevFilters) => ({
 			...prevFilters,
@@ -76,7 +79,7 @@ const IncidentTable = ({ incidents }) => {
 		}));
 	};
 
-	// Function to handle checkbox changes in filters (for multi-select fields like status)
+	// Handle changes in checkbox filters (for multi-select fields like status,priority and urgency)
 	const handleCheckboxChange = (field, value) => {
 		setFilters((prevFilters) => ({
 			...prevFilters,
@@ -87,7 +90,7 @@ const IncidentTable = ({ incidents }) => {
 		setAnchorEl({}); // Close the menu after selection
 	};
 
-	// Toggle sorting order
+	// Toggle sorting order for date sorting
 	const toggleSortOrder = () => {
 		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
@@ -182,28 +185,24 @@ const IncidentTable = ({ incidents }) => {
 
 	return (
 		<Box>
-			{/* Clear All Filters Button */}
 			<Box display="flex" justifyContent="flex-end" mb={2}>
 				<Button variant="contained" onClick={clearAllFilters}>
 					Clear All Filters
 				</Button>
 			</Box>
-
 			<TableContainer component={Paper}>
 				<Table>
 					<TableHead>
 						<TableRow>
-							{/* Render table headers with filter and sort options */}
 							{['status', 'priority', 'urgency', 'title', 'created'].map((column) => (
 								<TableCell
 									key={column}
 									sx={{
 										backgroundColor: '#424242',
-										color: '#fff',
+										color: '#fff', // White text for contrast
 										fontSize: '1rem',
 									}}
 								>
-									{/* Column title and filter icon */}
 									<Box display="flex" alignItems="center">
 										<Typography sx={{ color: '#fff' }}>
 											{column.charAt(0).toUpperCase() + column.slice(1)}
@@ -229,7 +228,7 @@ const IncidentTable = ({ incidents }) => {
 														onKeyDown={handleTitleFilterKeyDown}
 														inputRef={titleFilterRef}
 														sx={{
-															backgroundColor: '#fff',
+															backgroundColor: '#fff', // White background for the TextField
 															mt: 1,
 														}}
 														InputProps={{
@@ -250,20 +249,75 @@ const IncidentTable = ({ incidents }) => {
 										)}
 										{column === 'created' && (
 											<IconButton onClick={toggleSortOrder} size="small" sx={{ color: '#fff' }}>
-												<SwapVertIcon fontSize="small" />
+												{sortOrder === 'asc' ? (
+													<SwapVertIcon fontSize="small" />
+												) : (
+													<SwapVertIcon fontSize="small" />
+												)}
 											</IconButton>
 										)}
 									</Box>
+									<Menu
+										anchorEl={anchorEl[column]}
+										open={Boolean(anchorEl[column])}
+										onClose={() => closeFilterMenu(column)}
+									>
+										{column === 'status' &&
+											['Acknowledged', 'Triggered', 'Resolved'].map((status) => (
+												<MenuItem
+													key={status}
+													onClick={() => handleCheckboxChange('status', status)}
+												>
+													<Checkbox checked={filters.status.includes(status)} />
+													{status}
+												</MenuItem>
+											))}
+										{column === 'priority' &&
+											['P1', 'P2', 'P3'].map((priority) => (
+												<MenuItem
+													key={priority}
+													onClick={() => handleCheckboxChange('priority', priority)}
+												>
+													<Checkbox checked={filters.priority.includes(priority)} />
+													{priority}
+												</MenuItem>
+											))}
+										{column === 'urgency' &&
+											['high', 'low'].map((urgency) => (
+												<MenuItem
+													key={urgency}
+													onClick={() => handleCheckboxChange('urgency', urgency)}
+												>
+													<Checkbox checked={filters.urgency.includes(urgency)} />
+													{urgency.charAt(0).toUpperCase() + urgency.slice(1)}
+												</MenuItem>
+											))}
+										{column === 'created' &&
+											[5, 10, 30].map((days) => (
+												<MenuItem key={days} onClick={() => handleDateRangeFilter(days)}>
+													Last {days} days
+												</MenuItem>
+											))}
+									</Menu>
 								</TableCell>
 							))}
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{/* Render filtered incidents or "No Data Found" if empty */}
 						{filteredIncidents.length > 0 ? (
 							filteredIncidents.map((incident, index) => (
 								<TableRow key={index}>
-									<TableCell sx={{ fontSize: '1rem', color: incident.status === 'Resolved' ? 'green' : 'red' }}>
+									<TableCell
+										sx={{
+											color:
+												incident.status === 'Resolved'
+													? 'green'
+													: ['Acknowledged', 'Triggered'].includes(incident.status)
+													? 'red'
+													: 'inherit',
+											fontSize: '1rem',
+										}}
+									>
 										{incident.status}
 									</TableCell>
 									<TableCell sx={{ fontSize: '1rem' }}>{incident.priority.summary}</TableCell>
