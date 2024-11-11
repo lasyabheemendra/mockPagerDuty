@@ -5,6 +5,7 @@ import { Box, Typography } from '@mui/material';
 const COLORS = ['#d32f2f', '#FFBF00', '#388e3c'];
 
 const IncidentPieChart = ({ incidents }) => {
+  // Count the statuses of incidents
   const statusCounts = incidents.reduce(
     (acc, { status }) => {
       acc[status]++;
@@ -13,6 +14,10 @@ const IncidentPieChart = ({ incidents }) => {
     { Triggered: 0, Acknowledged: 0, Resolved: 0 }
   );
 
+  // Calculate the total open incidents (Triggered and Acknowledged)
+  const totalOpenIncidents = statusCounts.Triggered + statusCounts.Acknowledged;
+
+  // Prepare data for the pie chart
   const data = Object.keys(statusCounts).map((key, i) => ({
     name: key,
     value: statusCounts[key],
@@ -35,14 +40,14 @@ const IncidentPieChart = ({ incidents }) => {
           ))}
         </Pie>
         <text
-					x="50%"
-					y="50%"
-					textAnchor="middle"
-					dominantBaseline="middle"
-					style={{ fontSize: '18px', fontWeight: 'bold' }}
-				>
-					All time incidents
-				</text>
+          x="50%"
+          y="50%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{ fontSize: '16px', fontWeight: 'bold' }}
+        >
+          {`Open Incidents: ${totalOpenIncidents}`}
+        </text>
       </PieChart>
       <Box ml={4}>
         {data.map((entry) => (
