@@ -22,32 +22,16 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ClearIcon from '@mui/icons-material/Clear';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
 import dayjs from 'dayjs';
+import { incidentStatuses, incidentPriorities, incidentUrgencies } from '../config';
 
 // Utility function to format incident creation date
 const formatDate = (created_at) => {
-	let formattedDate;
-	try {
-		// Parse date if available
-		const parsedDate = created_at ? parseISO(created_at) : null;
-		if (!isNaN(parsedDate)) {
-			// Format parsed date as "MMM d, yyyy at h:mm a"
-			formattedDate = format(parsedDate, "MMM d, yyyy 'at' h:mm a");
-		} else {
-			// Fallback to local date format if parsing fails
-			const fallbackDate = new Date(created_at);
-			formattedDate = !isNaN(fallbackDate)
-				? `on ${fallbackDate.toLocaleString('en-US', {
-						month: 'short',
-						day: 'numeric',
-						year: 'numeric',
-				  })} at ${fallbackDate.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`
-				: 'N/A';
-		}
-	} catch (error) {
-		console.error('Date parsing error:', error);
-		formattedDate = 'N/A';
-	}
-	return formattedDate;
+	if (!created_at) return 'N/A';
+
+	const parsedDate = dayjs(created_at);
+	return parsedDate.isValid()
+		? parsedDate.format("MMM D, YYYY [at] h:mm A")
+		: 'N/A';
 };
 
 const IncidentTable = ({ incidents }) => {
@@ -264,7 +248,7 @@ const IncidentTable = ({ incidents }) => {
 										onClose={() => closeFilterMenu(column)}
 									>
 										{column === 'status' &&
-											['Acknowledged', 'Triggered', 'Resolved'].map((status) => (
+											incidentStatuses.map((status) => (
 												<MenuItem
 													key={status}
 													onClick={() => handleCheckboxChange('status', status)}
@@ -274,7 +258,7 @@ const IncidentTable = ({ incidents }) => {
 												</MenuItem>
 											))}
 										{column === 'priority' &&
-											['P1', 'P2', 'P3'].map((priority) => (
+											incidentPriorities.map((priority) => (
 												<MenuItem
 													key={priority}
 													onClick={() => handleCheckboxChange('priority', priority)}
@@ -284,7 +268,7 @@ const IncidentTable = ({ incidents }) => {
 												</MenuItem>
 											))}
 										{column === 'urgency' &&
-											['high', 'low'].map((urgency) => (
+											incidentUrgencies.map((urgency) => (
 												<MenuItem
 													key={urgency}
 													onClick={() => handleCheckboxChange('urgency', urgency)}
